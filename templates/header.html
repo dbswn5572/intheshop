@@ -1,0 +1,9 @@
+<header class="masthead mb-auto">
+    <div class="inner">
+        <h3 class="masthead-brand">intheshop</h3>
+        <nav class="nav nav-masthead justify-content-center">
+            <a class="nav-link {{ 'active' if url_for(request.endpoint) == '/' }}" href="/">알림 신청</a>
+            <a class="nav-link {{ 'active' if url_for(request.endpoint) == '/pushlist' }}" href="/pushlist">알림 확인</a>
+        </nav>
+    </div>
+</header>
