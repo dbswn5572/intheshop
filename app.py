@@ -20,7 +20,7 @@ def pushlist():
 
 
 @app.route('/push', methods=['POST'])
-def write_review():
+def write_alert():
     # 'target_give': target,
     #                     'price_give': price,
     #                     'phone_give': phone
@@ -34,7 +34,7 @@ def write_review():
         'pushLow': price_receive,
         'pushNum': phone_receive
     }
-    db.reviews.insert_one(doc)
+    db.alerts.insert_one(doc)
 
     return jsonify({'result': 'success', 'msg': '알림 요청이 완료되었습니다. \n희망가 등록 시 알림드릴께요 🥰'})
 
@@ -53,9 +53,10 @@ def crawl(keyword):
     # 받아온 JSON 결과를 딕셔너리로 변환합니다.
     shopping_data = resp.json()
     # 검색 결과 중 items를 꺼내어 반환합니다.
+    items = shopping_data['items']
     pprint.pprint(shopping_data)
     for item in items:
-        if item['lprice'] > '5000':
+        if int(item['lprice']) > 0:
             print(item['link'], item['lprice'], item['mallName'])
 
 
