@@ -9,7 +9,7 @@ push_list = list(db.alerts.find({}, {'_id': False}))
 # print(push_list)
 
 for push in push_list:
-    price = push['pushLow']
+    price = int(push['pushLow'])
     phone = push['pushNum']
 
     # API info
@@ -24,10 +24,12 @@ for push in push_list:
     shopping_data = resp.json()
 
     # 검색 결과 중 items를 꺼내어 반환합니다.
-    pprint.pprint(shopping_data['items'])
+    #pprint.pprint(shopping_data['items'])
     items = shopping_data['items']
     for item in items:
-        if item['lprice'] < price:
+        lprice = int(item['lprice'])
+        print(price)
+        if lprice < price:
             print(item['link'], item['lprice'], item['mallName'])
 
 
@@ -39,7 +41,6 @@ for push in push_list:
 # 1-2. pushTarget를 검색 Keyword에 넣어서 검색한다
 # 2. 해당 Target에 low price를 db.alerts에서 가져온다
 # 2-1. User가 지정한 금액보다 적을 경우를 검색한다
-
 # 2-2. 적을 경우, Mallname,link,lprice를 가져온다
 # 2-3. 해당 User에게 카카오톡 알림을 보낸다
 
