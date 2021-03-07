@@ -1,12 +1,15 @@
 import pprint
 import requests
 from pymongo import MongoClient
+import telegram
 
+chat_token = "1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE"
 client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
 db = client.intheshop
 
+
 push_list = list(db.alerts.find({}, {'_id': False}))
-# print(push_list)
+print(push_list)
 
 for push in push_list:
     price = int(push['pushLow'])
@@ -28,9 +31,13 @@ for push in push_list:
     items = shopping_data['items']
     for item in items:
         lprice = int(item['lprice'])
-        print(price)
+        print(item)
         if lprice < price:
             print(item['link'], item['lprice'], item['mallName'])
+            #bot = telegram.Bot(token=chat_token)
+            #text = '♦️최저가 알림♦️'+'\n'+ '제품명:' + item['title'] + '\n' + '링크이동:' + item['link'] + '\n'+ '가격:' + item['lprice']
+            #bot.sendMessage(chat_id="1652157353", text=text)
+            #  '<뽐뿌 게시글 업데이트>'+'\n'+title+'\n'+link
 
 
 
