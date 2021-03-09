@@ -21,8 +21,8 @@
                 <div class="card-header">
                     <!--<h4 class="my-0 font-weight-normal">Free</h4>-->
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            100%
+                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+                            최저가 알림은 인더샵해서 해결 👌🏼
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                         </div>
                         <input type="text" id="phone" class="form-control" placeholder="" id="order-phone">
                     </div>
-                    <button type="button" onclick="makePush()" class="btn btn-lg btn-block btn-outline-primary">알림 요청</button>
+                    <button type="button" onclick="makePush()" style="font-size: medium" class="btn btn-lg btn-block btn-outline-primary">@intheshop bot에게 알림 요청하기</button>
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@
         } else if (!isCellPhone(phone)) {
             alert("연락처 형식은 010-XXXX-XXXX으로 입력해주실께요 :)");
             return
-        }
+         }
 
         // Push 알림 저장 요청
         $.ajax({
@@ -101,7 +101,9 @@
             success: function (response) {
                 if (response["result"] == "success") {
                     alert(response["msg"]);
-                    window.location.reload();
+                    {#window.location.reload();#}
+                    window.location.href = 'https://telegram.me/intheshop_bot';
+
                 }
             }
         })
@@ -111,7 +113,7 @@
             p = p.split('-').join('');
             let regPhone = /^((01[1|6|7|8|9])[1-9]+[0-9]{6,7})|(010[1-9][0-9]{7})$/;
             return regPhone.test(p);
-    }
+     }
 </script>
 </body>
 </html>
