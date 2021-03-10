@@ -1,16 +1,20 @@
 import requests
 import pprint
 import telegram
+import json
 
-from flask import render_template, Flask, request, jsonify
+from flask import render_template, Flask, request, jsonify, Response, send_file
 from pymongo import MongoClient
 from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 
 app = Flask(__name__)
 
+# client = MongoClient('mongodb://test:test@localhost', 27017)
 client = MongoClient('localhost', 27017)
 db = client.intheshop
+
 chat_token = "1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE"
+updater = Updater(chat_token)
 
 
 @app.route('/')
@@ -25,9 +29,6 @@ def pushlist():
 
 @app.route('/push', methods=['POST'])
 def write_alert():
-    # 'target_give': target,
-    #                     'price_give': price,
-    #                     'phone_give': phone
     target_receive = request.form['target_give']
     price_receive = request.form['price_give']
     phone_receive = request.form['phone_give']
@@ -44,33 +45,57 @@ def write_alert():
 
 
 # Telegram start
+# https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/getMe
+# https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/sendMessage?chat_id=1652157353&text=api test
+# https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/setWebhook?url=http://intheshop-push.shop/
+
+def write_json(data, filename='response.json'):
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+
+@app.route('/telegram', methods=['POST', 'GET'])
 def start(update, context):
-    """안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다! """
-    # update.message.reply_text('안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '알림 정보 등록 확인을 위해 /info 눌러주세요! 🧐' + '\n')
+    """
+    안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!
+    update.message.reply_text('안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '알림 정보 등록 확인을 위해 /info 눌러주세요! 🧐' + '\n')
+    # 동일한 사용자에게 응답 할 수 있도록 chat_id 가져 오기
+    # 이 특정 메시지에 응답 할 수 있도록 메시지 ID 가져 오기
+    """
+    msg = request.get_json()
+
+    write_json(msg, 'telegram_requests.json')
+
+    chat_id = update.message.chat.id
+    msg_id = update.message.message_id
     update.message.reply_text(
         '안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 입력해주세요!(형식: 01012345678)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ')
+    start_handler = CommandHandler('start', start)
+    updater.dispatcher.add_handler(start_handler)
+    # updater.start_polling(timeout=3, clean=True)
+    # updater.idle()
+
+
+@app.route('/.well-known/pki-validation/6D2F02CED5234B9456BE852E09278754.txt')
+def certi():
+    return send_file("static/6D2F02CED5234B9456BE852E09278754.txt")
 
 
 @app.route('/telephone', methods=['POST'])
 def get_info(update, context):
-    """핸드폰 번호 확인!"""
+    """
+    핸드폰 번호 확인!
     # update.message.reply_text('💌intheshop-push.shop💌 에서 등록한 연락처를 입력해주세요!')
+    """
+    info_handler = MessageHandler(Filters.text, get_info)
+    updater.dispatcher.add_handler(info_handler)
+    updater.start_polling(timeout=3, clean=True)
+    updater.idle()
     telephone = update.message.text
     if telephone is not None:
         print(telephone)
         update.message.reply_text('감사합니다!' + '\n\n' + '최저가 딜이 등록되면 알림 드리겠습니다👌🏼')
     db.alerts.update_one({'pushNum': telephone}, {'$set': {'telephone': telephone}})
-
-
-updater = Updater(chat_token)
-start_handler = CommandHandler('start', start)
-updater.dispatcher.add_handler(start_handler)
-
-info_handler = MessageHandler(Filters.text, get_info)
-updater.dispatcher.add_handler(info_handler)
-
-updater.start_polling(timeout=3, clean=True)
-updater.idle()
 
 
 def alert():
@@ -93,6 +118,8 @@ def alert():
         # pprint.pprint(shopping_data['items'])
         items = shopping_data['items']
         telephone = db.alerts.find_one({"telephone": phone})
+        print(telephone, phone)
+
         for item in items:
             lprice = int(item['lprice'])
             if lprice > price and phone == telephone:
