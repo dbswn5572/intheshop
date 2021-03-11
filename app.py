@@ -58,8 +58,15 @@ def certi():
 #     with open(filename, 'w') as f:
 #         json.dump(data, f, indent=4, ensure_ascii=False)
 
+def sendMessage(chat_id, text):
+    url = f'https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/sendMessage'
+    payload = {'chat_id': chat_id, 'text': text}
 
-@app.route('/telegram', methods=['POST'])
+    r = requests.post(url, json=payload)
+    return r
+
+
+@app.route('/telegram', methods=['POST', 'GET'])
 def start():
     """
     안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!
@@ -67,11 +74,14 @@ def start():
     # 동일한 사용자에게 응답 할 수 있도록 chat_id 가져 오기
     # 이 특정 메시지에 응답 할 수 있도록 메시지 ID 가져 오기
     """
-
     data = request.get_json()
     print(data)
+    chat_id = data['message']['chat']['id']
+    text = data['message']['text']
+    sendMessage(chat_id, text)
 
-    return '', 200
+    return json.dumps({'success':True})
+    # return '', 200
 
     # chat_id = update.message.chat.id
     # msg_id = update.message.message_id
@@ -81,6 +91,7 @@ def start():
     # updater.dispatcher.add_handler(start_handler)
     # updater.start_polling(timeout=3, clean=True)
     # updater.idle()
+
 
 
 @app.route('/telephone', methods=['POST'])
