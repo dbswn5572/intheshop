@@ -78,9 +78,10 @@ def start():
     text = data['message']['text']
 
     if text == r'/start':
-        txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 입력해주세요!(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
+        txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
         sendMessage(chat_id, txt)
         if text == r'((010)[1-9]+[0-9]{6,7})|(010[1-9][0-9]{7})$':
+            print('번호출력')
             print(text)
 
     else:
