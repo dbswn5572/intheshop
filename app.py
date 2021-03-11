@@ -43,42 +43,44 @@ def write_alert():
 
     return jsonify({'result': 'success', 'msg': 'Telegram으로 알림 받으러 가보실께요!'})
 
+# check for SSL
+@app.route('/.well-known/pki-validation/6D2F02CED5234B9456BE852E09278754.txt')
+def certi():
+    return send_file("static/6D2F02CED5234B9456BE852E09278754.txt")
+
 
 # Telegram start
 # https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/getMe
 # https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/sendMessage?chat_id=1652157353&text=api test
-# https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/setWebhook?url=http://intheshop-push.shop/
+# https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/setWebhook?url=https://intheshop-push.shop/telegram
 
-def write_json(data, filename='response.json'):
-    with open(filename, 'w') as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
+# def write_json(data, filename='response.json'):
+#     with open(filename, 'w') as f:
+#         json.dump(data, f, indent=4, ensure_ascii=False)
 
 
-@app.route('/telegram', methods=['POST', 'GET'])
-def start(update, context):
+@app.route('/telegram', methods=['POST'])
+def start():
     """
     안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!
     update.message.reply_text('안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '알림 정보 등록 확인을 위해 /info 눌러주세요! 🧐' + '\n')
     # 동일한 사용자에게 응답 할 수 있도록 chat_id 가져 오기
     # 이 특정 메시지에 응답 할 수 있도록 메시지 ID 가져 오기
     """
-    msg = request.get_json()
 
-    write_json(msg, 'telegram_requests.json')
+    data = request.get_json()
+    print(data)
 
-    chat_id = update.message.chat.id
-    msg_id = update.message.message_id
-    update.message.reply_text(
-        '안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 입력해주세요!(형식: 01012345678)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ')
-    start_handler = CommandHandler('start', start)
-    updater.dispatcher.add_handler(start_handler)
+    return '', 200
+
+    # chat_id = update.message.chat.id
+    # msg_id = update.message.message_id
+    # update.message.reply_text(
+    #     '안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 입력해주세요!(형식: 01012345678)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ')
+    # start_handler = CommandHandler('start', start)
+    # updater.dispatcher.add_handler(start_handler)
     # updater.start_polling(timeout=3, clean=True)
     # updater.idle()
-
-
-@app.route('/.well-known/pki-validation/6D2F02CED5234B9456BE852E09278754.txt')
-def certi():
-    return send_file("static/6D2F02CED5234B9456BE852E09278754.txt")
 
 
 @app.route('/telephone', methods=['POST'])
