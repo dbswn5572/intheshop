@@ -10,8 +10,8 @@ from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 
 app = Flask(__name__)
 
-# client = MongoClient('mongodb://test:test@localhost', 27017)
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@localhost', 27017)
+# client = MongoClient('localhost', 27017)
 db = client.intheshop
 
 chat_token = "1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE"
