@@ -81,42 +81,30 @@ def start():
         txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
         sendMessage(chat_id, txt)
 
-    elif text == r'((010)[1-9][0-9]{6,7})|(010[1-9][0-9]{7})$':
-        txt2 = '번호확인완'
+    if text == r'((010)[1-9][0-9]{6,7})|(010[1-9][0-9]{7})$':
+        txt2 = '감사합니다!' + '\n\n' + '최저가 딜이 등록되면 알림 드리겠습니다👌🏼'
         sendMessage(chat_id, txt2)
-
+        # update.message.reply_text('감사합니다!' + '\n\n' + '최저가 딜이 등록되면 알림 드리겠습니다👌🏼')
+        # db.alerts.update_one({'pushNum': telephone}, {'$set': {'telephone': telephone}})
     else:
         sendMessage(chat_id, text)
 
     return json.dumps({'success': True})
     # return '', 200
 
-    # chat_id = update.message.chat.id
-    # msg_id = update.message.message_id
-    # update.message.reply_text(
-    #     '안녕하세요, intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 입력해주세요!(형식: 01012345678)' +
-    # start_handler = CommandHandler('start', start)
-    # updater.dispatcher.add_handler(start_handler)
-    # updater.start_polling(timeout=3, clean=True)
-    # updater.idle()
 
-
-@app.route('/telephone', methods=['POST'])
-def get_info(update, context):
-    """
-    핸드폰 번호 확인!
-    # update.message.reply_text('💌intheshop-push.shop💌 에서 등록한 연락처를 입력해주세요!')
-    """
-    info_handler = MessageHandler(Filters.text, get_info)
-    updater.dispatcher.add_handler(info_handler)
-    updater.start_polling(timeout=3, clean=True)
-    updater.idle()
-    telephone = update.message.text
-    if telephone is not None:
-        print(telephone)
-        update.message.reply_text('감사합니다!' + '\n\n' + '최저가 딜이 등록되면 알림 드리겠습니다👌🏼')
-    db.alerts.update_one({'pushNum': telephone}, {'$set': {'telephone': telephone}})
-
+# @app.route('/telephone', methods=['POST'])
+# def get_info(update, context):
+#     """
+#     핸드폰 번호 확인!
+#     # update.message.reply_text('💌intheshop-push.shop💌 에서 등록한 연락처를 입력해주세요!')
+#     """
+#     info_handler = MessageHandler(Filters.text, get_info)
+#     updater.dispatcher.add_handler(info_handler)
+#     updater.start_polling(timeout=3, clean=True)
+#     updater.idle()
+#     telephone = update.message.text
+#     if telephone is not None:
 
 def alert():
     push_list = list(db.alerts.find({}, {'_id': False}))
@@ -144,10 +132,10 @@ def alert():
             lprice = int(item['lprice'])
             if lprice > price and phone == telephone:
                 print(item['link'], item['lprice'], item['mallName'])
-                bot = telegram.Bot(token=chat_token)
-                text = '♦️ ️최저가 알림 ♦️️' + '\n' + keyword + '를(을) 구매하실 때입니다!' + '\n\n' + '✔️판매가: ' + "{:,}".format(
-                    int(item['lprice'])) + '원' + '\n' + '✔️바로 확인하기: ' + item['link'] + '\n'
-                bot.sendMessage(chat_id="1652157353", text=text)
+                # bot = telegram.Bot(token=chat_token)
+                text = '♦️ ️최저가 알림 ♦️️' + '\n' + keyword + '를(을) 구매하실 때입니다!' + '\n\n' + '✔️판매가: ' + "{:,}".format(int(item['lprice'])) + '원' + '\n' + '✔️바로 확인하기: ' + item['link'] + '\n'
+                # bot.sendMessage(chat_id="1652157353", text=text)
+                sendMessage('1652157353', text)
 
 
 if __name__ == '__main__':
