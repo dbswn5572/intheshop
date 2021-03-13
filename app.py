@@ -72,22 +72,24 @@ def start():
     """
     동일한 사용자에게 응답 할 수 있도록 chat_id 가져 오기
     """
-    data = request.get_json()
-    print(data)
-    chat_id = data['message']['chat']['id']
-    text = data['message']['text']
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
 
-    if text == r'/start':
-        txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
-        sendMessage(chat_id, txt)
+        chat_id = data['message']['chat']['id']
+        text = data['message']['text']
+
+        if text == r'/start':
+            txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
+            sendMessage(chat_id, txt)
 
     # if text == r'((010)[1-9][0-9]{6,7})|(010[1-9][0-9]{7})$':
     #     txt2 = '감사합니다!' + '\n\n' + '최저가 딜이 등록되면 알림 드리겠습니다👌🏼'
     #     sendMessage(chat_id, txt2)
         # update.message.reply_text('감사합니다!' + '\n\n' + '최저가 딜이 등록되면 알림 드리겠습니다👌🏼')
         # db.alerts.update_one({'pushNum': telephone}, {'$set': {'telephone': telephone}})
-    else:
-        sendMessage(chat_id, text)
+        else:
+            sendMessage(chat_id, text)
 
     # return json.dumps({'success': True})
     return '', 200
