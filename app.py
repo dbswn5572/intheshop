@@ -80,16 +80,20 @@ def start():
         chat_id = data['message']['chat']['id']
         print(chat_id)
 
-        if ['reply_to_message'] in data:
-            return 0
+        verify = data['message']['reply_to_message']['message_id']
+        print(verify)
 
-        else:
-            echotext = data['message']['text']
-            if echotext == r'/start':
-                txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
-                sendMessage(chat_id, txt)
-            else:
-                sendMessage(chat_id, echotext)
+
+        # if ['reply_to_message'] in data:
+        #     return 0
+        #
+        # else:
+        #     echotext = data['message']['text']
+        #     if echotext == r'/start':
+        #         txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
+        #         sendMessage(chat_id, txt)
+        #     else:
+        #         sendMessage(chat_id, echotext)
 
 
         # if data['message']['contact']['phone_number'] == '':
