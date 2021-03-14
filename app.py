@@ -78,6 +78,7 @@ def start():
         print(data)
 
         chat_id = data['message']['chat']['id']
+        print(chat_id)
         echotext = data['message']['text']
         replytext = data['message']['reply_to_message']['text']
 
