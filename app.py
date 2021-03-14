@@ -79,10 +79,10 @@ def start():
 
     chat_id = data['message']['chat']['id']
 
-    if data['message']['reply_to_message']['message_id'] == 433:
-        sendMessage(chat_id, '다시 입력해주세요 :) ')
+    # if data['message']['reply_to_message']['message_id'] == 433:
+    #     sendMessage(chat_id, '다시 입력해주세요 :) ')
 
-    elif data['message']['text'] == r'/start':
+    if data['message']['text'] == r'/start':
         txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
         sendMessage(chat_id, txt)
 
