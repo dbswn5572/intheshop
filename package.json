@@ -1,0 +1,9 @@
+{'update_id': 763365140,
+  'message': {'message_id': 412, 'from':
+              {'id': 1652157353, 'is_bot': False, 'first_name': 'Kallyyun', 'last_name': 'JUNG', 'language_code': 'ko'},
+             'chat': {'id': 1652157353, 'first_name': 'Kallyyun', 'last_name': 'JUNG', 'type': 'private'},
+    'date': 1615609255,
+    'reply_to_message': {'message_id': 411, 'from':
+                          {'id': 1671094125, 'is_bot': True, 'first_name': 'intheshop', 'username': 'intheshop_bot'}, 'chat':
+                          {'id': 1652157353, 'first_name': 'Kallyyun', 'last_name': 'JUNG', 'type': 'private'},
+              'date': 1615609252, 'text': "Hi There!\n\nBefore We Can Continue We Need To Verify That You're A REAL User", 'entities': [{'offset': 0, 'length': 9, 'type': 'bold'}, {'offset': 66, 'length': 4, 'type': 'bold'}]}, 'contact': {'phone_number': '+821049076215', 'first_name': 'Kallyyun', 'last_name': 'JUNG', 'user_id': 1652157353}},

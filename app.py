@@ -59,6 +59,7 @@ def certi():
 # def write_json(data, filename='response.json'):
 #     with open(filename, 'w') as f:
 #         json.dump(data, f, indent=4, ensure_ascii=False)
+
 def sendMessage(chat_id, text):
     url = f'https://api.telegram.org/bot1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE/sendMessage'
     payload = {'chat_id': chat_id, 'text': text}
@@ -77,9 +78,13 @@ def start():
         print(data)
 
         chat_id = data['message']['chat']['id']
-        text = data['message']['text']
+        echotext = data['message']['text']
+        replytext = data['message']['reply_to_message']['text']
 
-        if text == r'/start':
+        if replytext == r'Hi There!*':
+            pass
+
+        if echotext == r'/start':
             txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
             sendMessage(chat_id, txt)
 
@@ -89,7 +94,7 @@ def start():
         # update.message.reply_text('감사합니다!' + '\n\n' + '최저가 딜이 등록되면 알림 드리겠습니다👌🏼')
         # db.alerts.update_one({'pushNum': telephone}, {'$set': {'telephone': telephone}})
         else:
-            sendMessage(chat_id, text)
+            sendMessage(chat_id, echotext)
 
     # return json.dumps({'success': True})
     return '', 200
