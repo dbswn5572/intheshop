@@ -80,8 +80,8 @@ def start():
         chat_id = data['message']['chat']['id']
         print(chat_id)
 
-        if "reply_to_message" in data:
-            pass
+        if ['reply_to_message'] in data:
+            return 0
 
         else:
             echotext = data['message']['text']
