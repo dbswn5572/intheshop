@@ -73,20 +73,21 @@ def start():
     """
     동일한 사용자에게 응답 할 수 있도록 chat_id 가져 오기
     """
-    if request.method == 'POST':
-        data = request.get_json()
-        print(data)
 
-        chat_id = data['message']['chat']['id']
-        print(chat_id)
+    data = request.get_json()
+    print(data)
 
-        if data['message']['reply_to_message']['message_id'] == r'433':
-            sendMessage(chat_id, '다시 입력해주세요 :) ')
-        elif data['message']['text'] == r'/start':
-            txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
-            sendMessage(chat_id, txt)
-        else:
-            sendMessage(chat_id, data['message']['text'])
+    chat_id = data['message']['chat']['id']
+
+    if data['message']['reply_to_message']['message_id'] == 433:
+        sendMessage(chat_id, '다시 입력해주세요 :) ')
+
+    elif data['message']['text'] == r'/start':
+        txt = 'intheshop에 알림을 등록해주셔서 감사합니다!' + '\n\n' + '💌intheshop-push.shop💌 에서 등록한!' + '\n' + '연락처를 숫자만!! 입력해주세요.(형식: 010XXXXXXXX)' + '\n\n' + '등록한 정보가 다를 경우 알림을 보내드릴 수 없습니다ㅠ-ㅠ'
+        sendMessage(chat_id, txt)
+
+    else:
+        sendMessage(chat_id, data['message']['text'])
 
         # if ['reply_to_message'] in data:
         #     return 0
