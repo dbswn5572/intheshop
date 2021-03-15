@@ -1,42 +1,42 @@
-# import pprint
-# import requests
-# from pymongo import MongoClient
-# import telegram
-# from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
-#
-# chat_token = "1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE"
-# client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
-# db = client.intheshop
-#
-# push_list = list(db.alerts.find({}, {'_id': False}))
-# print(push_list)
-#
-# for push in push_list:
-#     price = int(push['pushLow'])
-#     phone = push['pushNum']
-#     # API info
-#     client_id = "Xwl1iOsmsp0RJjJImyvr"
-#     client_secret = "ZLaBm7BkGg"
-#     keyword = push['pushTarget']
-#     url = f"https://openapi.naver.com/v1/search/shop.json?query={keyword}&display=10&sort=date&productType=3"
-#     headers = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secret}
-#
-#     resp = requests.get(url, headers=headers)
-#     # 받아온 JSON 결과를 딕셔너리로 변환합니다.
-#     shopping_data = resp.json()
-#
-#     # 검색 결과 중 items를 꺼내어 반환합니다.
-#     # pprint.pprint(shopping_data['items'])
-#     items = shopping_data['items']
-#     telephone = db.alerts.find_one({"telephone": phone})
-#     for item in items:
-#         lprice = int(item['lprice'])
-#         if lprice > price:
-#             print(item['link'], item['lprice'], item['mallName'])
-#             bot = telegram.Bot(token=chat_token)
-#             text = '♦️ ️최저가 알림 ♦️️' + '\n' + keyword + '를(을) 구매하실 때입니다!' + '\n\n' + '✔️판매가: ' + "{:,}".format(
-#                 int(item['lprice'])) + '원' + '\n' + '✔️바로 확인하기: ' + item['link'] + '\n'
-#             bot.sendMessage(chat_id="1652157353", text=text)
+import pprint
+import requests
+from pymongo import MongoClient
+import telegram
+from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
+
+chat_token = "1671094125:AAGcJxhLg-HmGz-K4VRHWBT9xvl90ZwMjfE"
+client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
+db = client.intheshop
+
+push_list = list(db.alerts.find({}, {'_id': False}))
+print(push_list)
+
+for push in push_list:
+    price = int(push['pushLow'])
+    phone = push['pushNum']
+    # API info
+    client_id = "Xwl1iOsmsp0RJjJImyvr"
+    client_secret = "ZLaBm7BkGg"
+    keyword = push['pushTarget']
+    url = f"https://openapi.naver.com/v1/search/shop.json?query={keyword}&display=10&sort=date&productType=3"
+    headers = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secret}
+
+    resp = requests.get(url, headers=headers)
+    # 받아온 JSON 결과를 딕셔너리로 변환합니다.
+    shopping_data = resp.json()
+
+    # 검색 결과 중 items를 꺼내어 반환합니다.
+    # pprint.pprint(shopping_data['items'])
+    items = shopping_data['items']
+    telephone = db.alerts.find_one({"telephone": phone})
+    for item in items:
+        lprice = int(item['lprice'])
+        if lprice > price:
+            print(item['link'], item['lprice'], item['mallName'])
+            bot = telegram.Bot(token=chat_token)
+            text = '♦️ ️최저가 알림 ♦️️' + '\n' + keyword + '를(을) 구매하실 때입니다!' + '\n\n' + '✔️판매가: ' + "{:,}".format(
+                int(item['lprice'])) + '원' + '\n' + '✔️바로 확인하기: ' + item['link'] + '\n'
+            bot.sendMessage(chat_id="1652157353", text=text)
 #
 #
 # # scheduled > 매일 10시
